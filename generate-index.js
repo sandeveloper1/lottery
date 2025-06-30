@@ -1,4 +1,34 @@
+const fs = require('fs');
+const path = require('path');
 
+// Get all HTML files except index.html and template files
+const files = fs.readdirSync('.')
+  .filter(f => f.endsWith('.html') && f !== 'index.html' && !f.includes('template'));
+
+let cards = '';
+
+files.forEach(file => {
+  // Derive JSON filename from HTML filename
+  const jsonFile = file.replace('.html', '.json');
+  if (!fs.existsSync(jsonFile)) return;
+
+  // Read JSON data
+  const data = JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
+  const code = data.draw_number || data.code || '';
+  const name = data.lottery_name || data.name || '';
+  const date = data.draw_date || data.date || '';
+
+  cards += `
+    <a href="${file}" class="card">
+      <div class="code">${code}</div>
+      <div class="name">${name}</div>
+      <div class="date">${date}</div>
+    </a>
+  `;
+});
+
+// HTML template for the homepage
+const html = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -61,19 +91,11 @@
   <div class="header">Ponkudam</div>
   <div class="welcome">welcome</div>
   <div class="cards">
-    
-    <a href="BT-8-2025-06-30.html" class="card">
-      <div class="code">BT8</div>
-      <div class="name">SAMRUDHI</div>
-      <div class="date">30/06/2025</div>
-    </a>
-  
-    <a href="SM-9-2025-06-29.html" class="card">
-      <div class="code">SM-9</div>
-      <div class="name">SAMRUDHI</div>
-      <div class="date">29/06/2025</div>
-    </a>
-  
+    ${cards}
   </div>
 </body>
 </html>
+`;
+
+fs.writeFileSync('index.html', html);
+console.log('index.html generated!');

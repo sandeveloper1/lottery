@@ -1,0 +1,254 @@
+<!-- result-template.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAMRUDHI BT8 Lottery Results</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        .lottery-info {
+            padding: 20px;
+            background: #e3f2fd;
+            border-bottom: 1px solid #bbdefb;
+        }
+        .lottery-info h2 {
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .info-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #1976d2;
+        }
+        .info-item strong {
+            color: #1976d2;
+        }
+        .prizes-section {
+            padding: 20px;
+        }
+        .prize-category {
+            margin-bottom: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .prize-header {
+            background: linear-gradient(135deg, #4caf50, #45a049);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .prize-header h3 {
+            font-size: 1.5em;
+            margin: 0;
+        }
+        .prize-amount {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .prize-content {
+            padding: 20px;
+        }
+        .winner-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .winner-item {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            color: #495057;
+        }
+        .winner-item.location {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+        .numbers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 8px;
+            margin-top: 15px;
+        }
+        .number-item {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 12px 8px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+        .number-item:hover {
+            transform: scale(1.05);
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px;
+            border-left: 4px solid #c62828;
+        }
+        .footer {
+            background: #343a40;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        @media (max-width: 768px) {
+            .numbers-grid {
+                grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            }
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎰 SAMRUDHI BT8 Lottery Results</h1>
+            <p>Automatically loaded from <b>BT-8-2025-06-30.json</b></p>
+        </div>
+        <div id="content">
+            <div class="loading">
+                <h3>⏳ Loading BT-8-2025-06-30.json...</h3>
+                <p>Please wait while we fetch and display the results.</p>
+            </div>
+        </div>
+        <div class="footer">
+            <p>&copy; 2025 SAMRUDHI BT8 | Kerala State Lotteries</p>
+            <p style="font-size:14px;">If you see an error, try running a local web server:<br>
+            <code>python -m http.server 8000</code> and open <a href="http://localhost:8000/BT-8-2025-06-30.json" target="_blank">http://localhost:8000/BT-8-2025-06-30.json</a></p>
+        </div>
+    </div>
+    <script>
+    function showLoading() {
+        document.getElementById('content').innerHTML = `
+            <div class="loading">
+                <h3>⏳ Loading BT-8-2025-06-30.json...</h3>
+                <p>Please wait while we fetch and display the results.</p>
+            </div>
+        `;
+    }
+    function showError(message) {
+        document.getElementById('content').innerHTML = `
+            <div class="error">
+                <h3>❌ Error</h3>
+                <p>${message}</p>
+                <p style="font-size:14px;">If you are opening this file directly, your browser may block local file fetches.<br>
+                Try running a local web server:<br>
+                <code>python -m http.server 8000</code> and open <a href='http://localhost:8000/BT-8-2025-06-30.json' target='_blank'>http://localhost:8000/BT-8-2025-06-30.json</a></p>
+            </div>
+        `;
+    }
+    function formatAmount(amount) {
+        if (!amount) return '';
+        return '₹' + parseInt(amount.replace(/[^\d]/g, '')).toLocaleString('en-IN');
+    }
+    function displayLottery(data) {
+        let html = `<div class=\"lottery-info\">
+            <h2>🎯 ${data.lottery_name || ''} Lottery Results</h2>
+            <div class=\"info-grid\">
+                <div class=\"info-item\"><strong>Draw Number:</strong><br>${data.draw_number || ''}</div>
+                <div class=\"info-item\"><strong>Draw Date:</strong><br>${data.draw_date || ''}</div>
+                <div class=\"info-item\"><strong>Venue:</strong><br>${data.venue || data.location || ''}</div>
+            </div>
+        </div><div class=\"prizes-section\">`;
+        const prizeOrder = [
+            '1st_prize', 'consolation_prize', '2nd_prize', '3rd_prize',
+            '4th_prize', '5th_prize', '6th_prize', '7th_prize', '8th_prize', '9th_prize'
+        ];
+        for (let key of prizeOrder) {
+            const prize = data.prizes[key];
+            if (!prize) continue;
+            html += `<div class=\"prize-category\">
+                <div class=\"prize-header\">
+                    <h3>🏆 ${key.replace('_', ' ').toUpperCase()}</h3>
+                    <div class=\"prize-amount\">${formatAmount(prize.amount)}</div>
+                </div>
+                <div class=\"prize-content\">`;
+            if (prize.winners && prize.winners.length) {
+                if (prize.winners.length === 1 && /\(.*\)/.test(prize.winners[0])) {
+                    // Single winner with location
+                    const [num, loc] = prize.winners[0].split(/\s*\(([^)]+)\)/).filter(Boolean);
+                    html += `<div class=\"winner-info\">
+                        <div class=\"winner-item\">${num}</div>
+                        <div class=\"winner-item location\">📍 ${loc || ''}</div>
+                    </div>`;
+                } else {
+                    html += `<div class=\"numbers-grid\">`;
+                    prize.winners.forEach(winner => {
+                        html += `<div class=\"number-item\">${winner}</div>`;
+                    });
+                    html += `</div>`;
+                }
+            }
+            html += `</div></div>`;
+        }
+        html += `</div>`;
+        document.getElementById('content').innerHTML = html;
+    }
+    window.onload = function() {
+        showLoading();
+        fetch('BT-8-2025-06-30.json')
+            .then(response => {
+                if (!response.ok) throw new Error('HTTP error! status: ' + response.status);
+                return response.json();
+            })
+            .then(data => displayLottery(data))
+            .catch(err => showError('Failed to fetch BT-8-2025-06-30.json: ' + err));
+    };
+    </script>
+</body>
+</html>

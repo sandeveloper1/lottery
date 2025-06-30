@@ -1,0 +1,40 @@
+name: Generate HTML on JSON Update
+
+on:
+  push:
+    paths:
+      - '**.json'
+      - 'src/**.java'
+      - '.github/workflows/generate-html.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Download org.json
+        run: |
+          mkdir -p lib
+          curl -L -o lib/json.jar https://repo1.maven.org/maven2/org/json/json/20231013/json-20231013.jar
+
+      - name: Compile Java
+        run: javac -cp lib/json.jar src/LotteryHtmlGenerator.java
+
+      - name: Run Java to generate HTML
+        run: java -cp src:lib/json.jar src.LotteryHtmlGenerator
+
+      - name: Commit and push generated HTML
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add index.html
+          git commit -m "Auto-generate HTML from new JSON" || echo "No changes to commit"
+          git push
+        continue-on-error: true 

@@ -28,7 +28,7 @@ jobs:
         run: javac -cp lib/json.jar src/LotteryHtmlGenerator.java
 
       - name: Run Java to generate HTML
-        run: java -cp src:lib/json.jar src.LotteryHtmlGenerator
+        run: java -cp "src:lib/json.jar" LotteryHtmlGenerator
 
       - name: Commit and push generated HTML
         run: |
